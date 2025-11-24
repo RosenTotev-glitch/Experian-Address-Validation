@@ -18,9 +18,7 @@ export default class EmailValidation {
 
   public validateEmail(email: string): void {
     
-    const data = JSON.stringify({ email });
-
-    
+    const data = JSON.stringify({ email });    
 
     this.request.send(
       this.baseUrl + this.emailValidationV2,
