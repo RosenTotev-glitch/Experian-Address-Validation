@@ -7,10 +7,10 @@ export default class Request {
   public currentRequest;
 
 
-  public send(url: string, method: 'GET' | 'POST', callback: (data: object) => void, data?: string, headers: {key: string, value: string | boolean}[] = []): void {
+  public send(url: string, method: 'GET' | 'POST', callback: (data: object) => void, data?: string, headers: { key: string, value: string | boolean }[] = []): void {
     this.currentRequest = new XMLHttpRequest();
     this.currentRequest.open(method, url, true);
-    this.currentRequest.timeout = 5000; // 5 seconds
+    this.currentRequest.timeout = 20000; // 5 seconds
     this.currentRequest.setRequestHeader('auth-token', this.instance.options.token);
     this.currentRequest.setRequestHeader('Content-Type', 'application/json');
     this.currentRequest.setRequestHeader('Accept', 'application/json');
@@ -22,6 +22,7 @@ export default class Request {
       if (this.currentRequest.status >= 200 && this.currentRequest.status < 400) {
         // Success!
         const data = JSON.parse(this.currentRequest.responseText);
+        this.instance.events.trigger('post-search', xhr);
         callback(data);
       } else {
         // We reached our target server, but it returned an error
