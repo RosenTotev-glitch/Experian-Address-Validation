@@ -5,7 +5,7 @@ var options = {
     maxSuggestionsForLookup: 1000,
     useSpinner: false,
     elements: {
-    countryList: document.querySelector("#country-dataset-container select#country"),
+        countryList: document.querySelector("#country-dataset-container select#country"),
         address_line_1: document.querySelector("input[name='address_line_1']"),
         address_line_2: document.querySelector("input[name='address_line_2']"),
         address_line_3: document.querySelector("input[name='address_line_2']"),
@@ -26,7 +26,7 @@ var addressValidationMap, addressValidationW3wMarker, addressValidationGeoMarker
 // Show country dataset dropdown only after user chooses to validate an address
 var showDatasetBtn = document.getElementById('show-dataset-button');
 if (showDatasetBtn) {
-    showDatasetBtn.addEventListener('click', function() {
+    showDatasetBtn.addEventListener('click', function () {
         var container = document.getElementById('country-dataset-container');
         var trigger = document.getElementById('dataset-trigger');
         if (container && trigger) {
@@ -55,7 +55,7 @@ document.querySelector('main').classList.add('inactive');
 document.querySelector('.token-prompt').classList.remove('hidden');
 
 // populate the country dataset dropdown with the authorized country datasets
-address.events.on("post-datasets-update", function() {
+address.events.on("post-datasets-update", function () {
     let countryListElement = options.elements.countryList;
     let optionElements = countryListElement.getElementsByTagName("option")
     Array.from(optionElements).filter(option => option.innerText !== 'Please select').forEach(option => option.remove())
@@ -70,7 +70,7 @@ address.events.on("post-datasets-update", function() {
 });
 
 // Show the supported search types for the selected country
-address.events.on("post-country-list-change", function(supportedSearchTypes, currentSearchType) {
+address.events.on("post-country-list-change", function (supportedSearchTypes, currentSearchType) {
     // Reset all search types to hidden
     document.querySelectorAll('.search-type-selector').forEach(panel => panel.classList.add('hidden'));
     document.querySelectorAll('label[data-panel-type]').forEach(label => label.classList.add('hidden'));
@@ -87,19 +87,18 @@ address.events.on("post-country-list-change", function(supportedSearchTypes, cur
 });
 
 // Show the large spinner while we're searching for the formatted address
-address.events.on("pre-formatting-search", function() {
-    if (!(address.searchType === 'autocomplete' && address.inputs.length === 4))
-    {
+address.events.on("pre-formatting-search", function () {
+    if (!(address.searchType === 'autocomplete' && address.inputs.length === 4)) {
         document.querySelector(".loader").classList.remove("hidden");
     }
 });
 
 // Show the large spinner while we're searching for the formatted address
-address.events.on("pre-search", function() {document.querySelector(".loader").classList.remove("hidden");});
+address.events.on("pre-search", function () { document.querySelector(".loader").classList.remove("hidden"); });
 
 
 // Hide the large spinner when a result is found
-address.events.on("post-formatting-search", function(data) {
+address.events.on("post-formatting-search", function (data) {
     document.querySelector(".loader").classList.add("hidden");
     document.querySelector("#validated-address-info").classList.remove("hidden");
 
@@ -110,13 +109,17 @@ address.events.on("post-formatting-search", function(data) {
         // Hide the promptset as we have now captured the address
         document.querySelector('.promptset').classList.add('hidden');
         document.querySelector("#validated-name").classList.add("hidden");
+    } else if (data.result.names) {
+        document.querySelector(".formatted-address").classList.remove("hidden");
+        document.querySelectorAll(".formatted-address .hidden").forEach(element => element.classList.remove("hidden"));
+        // Hide the promptset as we have now captured the address
+        document.querySelector('.promptset').classList.add('hidden');
     }
-
     // Populate the metadata section with more details about this address
     populateMetadata(data);
 });
 
-address.events.on("post-formatting-lookup", function(key, item) {
+address.events.on("post-formatting-lookup", function (key, item) {
     document.querySelector("#validated-address-info").classList.add("hidden");
     document.querySelectorAll(".formatted-address").forEach(element => element.classList.remove("hidden"));
     document.querySelector('.promptset').classList.add('hidden');
@@ -127,7 +130,7 @@ address.events.on("post-formatting-lookup", function(key, item) {
 });
 
 // Hide the formatted address container again upon reset
-address.events.on("post-reset", function() {
+address.events.on("post-reset", function () {
     document.querySelector(".formatted-address").classList.add("hidden");
     resetMetadata();
     document.querySelector('.promptset').classList.remove('hidden');
@@ -142,22 +145,22 @@ address.events.on("post-reset", function() {
 });
 
 // Hide the loader if the request results in a 400 Bad Request error
-address.events.on("request-error", function() {
+address.events.on("request-error", function () {
     document.querySelector(".loader").classList.add("hidden");
 });
 
-address.events.on("post-search", function() {
+address.events.on("post-search", function () {
     document.querySelector(".loader").classList.add("hidden");
 });
 
 // Prompt for a token if the request is unauthorised (token is invalid or missing)
-address.events.on("request-error-401", function() {
+address.events.on("request-error-401", function () {
     document.querySelector('main').classList.add('inactive');
     document.querySelector('.token-prompt').classList.remove('hidden');
 });
 
 // When the promptset is changed, update the form fields accordingly
-address.events.on("post-promptset-check", function(response) {
+address.events.on("post-promptset-check", function (response) {
     const inputs = [];
     let errorElement = document.querySelector('.error-display');
     if (!errorElement.classList.contains("hidden")) {
@@ -208,9 +211,9 @@ address.events.on("post-promptset-check", function(response) {
                 input.setAttribute("placeholder", line.example);
             }
         }
-         inputs.push(input);
-         
-         document.querySelector('.address-field-inputs').append(label, input);
+        inputs.push(input);
+
+        document.querySelector('.address-field-inputs').append(label, input);
     });
 
     // Register the event listeners on the new inputs
